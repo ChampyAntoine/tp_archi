@@ -26,13 +26,17 @@
 			}
 			
 			//Quelle page je suis et quels commentaires prendre
-			if(!isset($_GET['page']))
+			if (!isset($_GET['page'])) 
 			{
-				$page=1;
+				$page = 1;
 			}
 			else
 			{
-				$page=$_GET['page'];
+				$page = intval($_GET['page']);
+				if ($page < 1) 
+				{
+					$page = 1;
+				}
 			}
 			$commparpage=5;
 			$premiercomm=$commparpage*($page-1);
@@ -62,10 +66,14 @@
 			{
 				$nbcomm=mysqli_num_rows($res); // Retourne le nombre de lignes dans un résultat. 
 				$nbpages=ceil($nbcomm/$commparpage); /*Ceil arrondit a l'entier supérieur*/
+				
+				$previousPage = $page > 1 ? $page - 1 : $page;
+				$nextPage = $page < $nbpages ? $page + 1 : $nbpages;
+	
 				echo "<br> Pages : ";
 				echo "<a href='commentaires.php?page=1'> Début </a>";
 				echo "<a href='commentaires.php?page=".($page-1)."'> Précédente </a>";
-				for($i=($page);$i<=($page+3);$i++)
+				for($i= ($page> 2 ? $page- 2 :1); $i<= ($page+ 2<= $nbpages? $page+ 2 :$nbpages); $i++)
                 {
                     echo "<a href='commentaires.php?page=$i'> $i </a>";
                 }
